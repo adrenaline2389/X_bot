@@ -1,14 +1,14 @@
+import os
 import tweepy
 import requests
-import schedule
 import time
 from datetime import datetime
 
-# ====== 填入你的 Twitter API Key ======
-API_KEY = "2BoycQEHvQjtvGXXeDEp31xIz"
-API_SECRET = "jjeAINeUoisCtRwnrUC2TxtOaZlK0VjwaRhEz9tINxfMuVEREH"
-ACCESS_TOKEN = "1766371093701378048-dgiuSWBPJlOB6Y74j5VLIJDjNbgPUv"
-ACCESS_SECRET = "qTTFuyrpDY2TYD2JepOhFHr3yrcNrJaXTfGrCDdiOVffU"
+# ====== 读取环境变量，填入 Twitter API Key ======
+API_KEY = os.getenv("API_KEY")
+API_SECRET = os.getenv("API_SECRET")
+ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
+ACCESS_SECRET = os.getenv("ACCESS_SECRET")
 
 # ====== 初始化 Twitter v2 Client ======
 client = tweepy.Client(
