@@ -48,9 +48,6 @@ schedule.every(4).hours.do(tweet_btc_price)
 
 print("🚀 BTC 价格播报机器人已启动...")
 
-# 👉 先手动发一条，确认能用
-tweet_btc_price()
-
 # ====== 主循环 ======
 while True:
     schedule.run_pending()
