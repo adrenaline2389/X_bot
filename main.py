@@ -63,7 +63,7 @@ def check_whale_transactions():
         for tx in txs:
             total_out = sum(out["value"] for out in tx["out"])
             amount_btc = satoshi_to_btc(total_out)
-            if amount_btc >= 1000:
+            if amount_btc >= 5000:
                 tweet_whale_alert(amount_btc, tx["hash"])
     except Exception as e:
         print("❌ 鲸鱼检测失败:", e)
