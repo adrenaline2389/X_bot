@@ -16,18 +16,39 @@ client = tweepy.Client(
     access_token_secret=ACCESS_SECRET
 )
 
-# ====== 获取 BTC 价格并发推 ======
-def get_btc_price():
-    url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+# ====== 获取多个价格 ======
+def get_prices(symbols):
+    ids = ",".join(symbols)
+    url = f"https://api.coingecko.com/api/v3/simple/price?ids={ids}&vs_currencies=usd"
     r = requests.get(url, timeout=10)
-    return r.json()["bitcoin"]["usd"]
+    return r.json()
 
-def tweet_btc_price():
-    price = get_btc_price()
+# ====== 一条推包含4个标的价格 ======
+def tweet_prices():
+    symbols = ["bitcoin", "ethereum", "solana", "binancecoin"]
+    names = {
+        "bitcoin": ("Bitcoin", "BTC", "🟠"),
+        "ethereum": ("Ethereum", "ETH", "🟣"),
+        "solana": ("Solana", "SOL", "🟢"),
+        "binancecoin": ("BNB", "BNB", "🟡"),
+    }
+
+    data = get_prices(symbols)
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    text = f"🟠 Bitcoin Price Update\n💰 ${price}\n⏰ {now}\n#Bitcoin #BTC"
+
+    lines = ["📊 Market Price Update"]
+    for s in symbols:
+        name, ticker, emoji = names[s]
+        price = data[s]["usd"]
+        lines.append(f"{emoji} {name} (${ticker}): ${price}")
+
+    lines.append(f"⏰ {now}")
+    lines.append("#Crypto #BTC #ETH #SOL #BNB")
+
+    text = "\n".join(lines)
     client.create_tweet(text=text)
     print("✅ 价格播报成功:", text)
+
 
 # ====== 鲸鱼转账提醒 ======
 def get_latest_block_height():
