@@ -28,7 +28,7 @@ jobs:
           API_SECRET: ${{ secrets.API_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
-        run: python -c "import main; main.tweet_btc_price()"
+        run: python -c "import main; main.tweet_prices()"
 
   whale-job:
     if: github.event.schedule == '*/10 * * * *'
