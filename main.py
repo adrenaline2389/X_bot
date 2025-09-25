@@ -50,7 +50,7 @@ def tweet_prices():
     print("✅ 价格播报成功:", text)
 
 
-# ====== 鲸鱼转账提醒 ======
+# ====== BTC Whale Alert ======
 def get_latest_block_height():
     url = "https://blockchain.info/q/getblockcount"
     r = requests.get(url, timeout=10)
@@ -88,3 +88,45 @@ def check_whale_transactions():
                 tweet_whale_alert(amount_btc, tx["hash"])
     except Exception as e:
         print("❌ 鲸鱼检测失败:", e)
+
+
+# ====== ETH Whale Alert ======
+ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY")
+
+def wei_to_eth(wei):
+    return wei / 1e18
+
+def get_latest_eth_block():
+    url = f"https://api.etherscan.io/api?module=proxy&action=eth_blockNumber&apikey={ETHERSCAN_API_KEY}"
+    r = requests.get(url, timeout=10).json()
+    return int(r["result"], 16)
+
+def get_eth_block_transactions(block_number):
+    url = f"https://api.etherscan.io/api?module=proxy&action=eth_getBlockByNumber&tag={hex(block_number)}&boolean=true&apikey={ETHERSCAN_API_KEY}"
+    r = requests.get(url, timeout=10).json()
+    return r["result"]["transactions"]
+
+def tweet_eth_whale_alert(amount, tx_hash):
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    text = (
+        f"🐋 ETH Whale Alert\n"
+        f"💰 {amount:.2f} ETH transferred\n"
+        f"🔗 https://etherscan.io/tx/{tx_hash}\n"
+        f"⏰ {now}\n"
+        f"#Ethereum #Whale"
+    )
+    client.create_tweet(text=text)
+    print("✅ ETH 鲸鱼提醒成功:", text)
+
+def check_eth_whale_transactions():
+    try:
+        latest_block = get_latest_eth_block()
+        txs = get_eth_block_transactions(latest_block)
+        for tx in txs:
+            # input transfer amount (only for normal ETH transfers, not ERC20)
+            if tx["value"] != "0x0":
+                amount_eth = wei_to_eth(int(tx["value"], 16))
+                if amount_eth >= 100000:
+                    tweet_eth_whale_alert(amount_eth, tx["hash"])
+    except Exception as e:
+        print("❌ ETH 鲸鱼检测失败:", e)
