@@ -126,7 +126,7 @@ def check_eth_whale_transactions():
             # input transfer amount (only for normal ETH transfers, not ERC20)
             if tx["value"] != "0x0":
                 amount_eth = wei_to_eth(int(tx["value"], 16))
-                if amount_eth >= 100000:
+                if amount_eth >= 10000:
                     tweet_eth_whale_alert(amount_eth, tx["hash"])
     except Exception as e:
         print("❌ ETH 鲸鱼检测失败:", e)
