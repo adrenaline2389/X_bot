@@ -38,6 +38,26 @@ ACCESS_TOKEN
 ACCESS_SECRET
 ```
 
+For posting, the X Developer app must have `Read and write` permissions. If you change
+the app permission, regenerate `ACCESS_TOKEN` and `ACCESS_SECRET` after the permission
+change, then update the GitHub repository secrets.
+
+## X API Cost Notice
+
+This bot posts through the official X API. X API access is paid usage: the account
+owner must purchase or enable API credits in the X Developer Console before the
+workflows can create posts.
+
+Typical posting costs:
+
+```text
+Price report post: plain text post, charged as Content: Create.
+Whale alert post: includes a blockchain.com URL, which may be charged as Content: Create with URL.
+```
+
+If the app permissions and secrets are correct but posting fails with `403 Forbidden`,
+check the X Developer Console billing, credits, API access, and account status.
+
 Optional repository variables:
 
 ```text
