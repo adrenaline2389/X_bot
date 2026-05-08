@@ -1,0 +1,16 @@
+[project]
+name = "x-bot"
+version = "0.1.0"
+description = "A GitHub Actions driven Twitter/X bot for crypto market and whale alerts."
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31.0",
+    "tweepy>=4.14.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
